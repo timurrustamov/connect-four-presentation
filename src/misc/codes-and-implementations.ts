@@ -21,7 +21,7 @@ function subscribe(listener: Function): Function {
     listeners = listeners.filter(l => l !== listener)
   }
 }
-`
+`;
 
 export const State = `
 // this state is extracted from [EER] 🛡 project
@@ -44,7 +44,7 @@ export class State {
   readonly isAuthenticated = false
   ...
 }
-`
+`;
 
 export const Action = `
 // create action to set user's firstname
@@ -64,7 +64,7 @@ export const SetFirstname =
 //   payload: 'Jean-Jacques'
 // }
 //
-`
+`;
 
 export const TrixAction = `
 // reduce boilerplate
@@ -80,7 +80,7 @@ export const SetData =
   })
 
 // SetData({ firstname: 'Jean', lastname: 'Jacques' })
-`
+`;
 
 export const Reducer = `
 // sorry for javascript! 🙈
@@ -99,7 +99,7 @@ const userReducer = (user, action) => {
 }
 
 export default userReducer
-`
+`;
 
 export const ComposableReducer = `
 // composable reducers
@@ -120,7 +120,7 @@ const userReducer = (user, action) => {
 }
 
 export default userReducer
-`
+`;
 
 export const CombineReducers = `
 // combine those reducers into a root reducer
@@ -132,7 +132,7 @@ export default combineReducers({
   router: routerReducer,
   ...
 })
-`
+`;
 
 export const Reselect = `
 // memoize does some memoization :P
@@ -148,7 +148,7 @@ const getVisibleTodos = (todos, filter) => {
       return todos.filter(t => !t.completed)
   }
 }
-`
+`;
 
 export const Undoable = `
 const undoable = (reducer) => {
@@ -172,7 +172,7 @@ const undoable = (reducer) => {
     }
   }
 }
-`
+`;
 
 export const Middleware = `
 const logger = state => next => action => {
@@ -189,7 +189,7 @@ const appendMeta = state => next => action => (
     meta: action.meta || { data: 'myMetadata' }
   })
 )
-`
+`;
 
 export const React = `
 import * as React from 'react'
@@ -210,4 +210,88 @@ class App extends React.Component<ComponentProps> {
     return <MyComponent { ...this.state } { ...this.actions } />
   }
 }
-`
+`;
+
+export const ConnectFourState = `
+export const createState =
+  (gridWidth = 7, gridHeight = 6): State => ({
+    board: {
+      grid: Array(gridHeight * gridWidth).fill(null),
+      dimensions: {
+        gridHeight,
+        gridWidth
+      }
+    },
+    currentPlayer: 0,
+    match: {
+      state: MatchState.Menu,
+      winningSequence: []
+    },
+    illegalMoves: [],
+    options: {
+      players: 2
+    },
+    theme: {
+      id: 0,
+      ...themes[0]
+    }
+  });
+`;
+
+export const ActionDeclarations = `
+export interface Action<T extends string> {
+  type: T;
+}
+
+export interface ActionWithPayload<T extends string, P extends Object>
+  extends Action<T> {
+  payload: P;
+}
+
+/**
+ * Creates an action creator
+ * @param type Actions type
+ */
+export function createAction<T extends string>(type: T): Action<T>;
+export function createAction<T extends string, P extends Object>(
+  type: T,
+  payload: P
+): ActionWithPayload<T, P>;
+export function createAction<T extends string, P extends Object>(
+  type: T,
+  payload?: P
+) {
+  return payload === undefined ? { type } : { type, payload };
+}
+
+export default createAction;
+`;
+
+export const ActionExample = `
+export const MAKE_A_MOVE = '[game/users epic] Make A Move';
+/**
+ * This action conditionally triggers the effect ADD_CHECKER in an EPIC
+ * @param columnId a column to place the checker for current player
+ */
+export const makeAMove = (columnId: number) =>
+  createAction(MAKE_A_MOVE, { columnId });
+export type makeAMove = ReturnType<typeof makeAMove>;
+`;
+
+export const EpicExample = `
+/**
+ * This epic changes the player after a successful move
+ * @param action$ Stream of actions
+ * @param state Current state
+ */
+export const ChangeCurrentPlayerEpic = (
+  action$: ActionsObservable<Actions>,
+  state: Store<State>
+) =>
+  action$.ofType(ADD_CHECKER).mergeMap((): Observable<Actions> => {
+    const { currentPlayer, options } = state.getState();
+    return Observable.of(
+      changeCurrentPlayer((currentPlayer + 1) % options.players)
+    );
+  });
+`;

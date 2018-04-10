@@ -10,36 +10,64 @@ body {
   font-size: 2rem;
 }
 
-.grid { position: absolute; top: 0; bottom: 0; left: 0; right: 0}
+.grid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 
 .recharts-wrapper {
   font-size: 1rem;
 }
 
-@media (min-width:576px) {
+@media (min-width: 576px) {
   .grid-container {
-    font-size: 2.5rem
+    font-size: 2.5rem;
   }
 }
-@media (min-width:768px) {
+@media (min-width: 768px) {
   .grid-container {
-    font-size: 3.5rem
+    font-size: 3.5rem;
   }
 }
-@media (min-width:992px) {
+@media (min-width: 992px) {
   .grid-container {
-    font-size: 4rem
+    font-size: 4rem;
   }
 }
 
 @keyframes spin {
   100% {
-    transform: rotate(360deg)
+    transform: rotate(360deg);
   }
 }
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translate3d(0, 0, 0);
+  }
+  5% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(0.89);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
 #background {
